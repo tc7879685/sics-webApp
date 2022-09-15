@@ -19,8 +19,8 @@ module.exports = defineConfig({
 		compress: true,
 		hot: true,
 		proxy: {
-			'/api': {
-				target: 'http://127.0.0.1:7878',
+			'/sics-boot': {
+				target: 'http://119.96.190.78:8089',
 				ws: false,
 				changOrigin: true, // 是否将请求header中的origin修改为目标地址
 				// pathRewrite: {

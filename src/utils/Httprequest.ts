@@ -154,7 +154,7 @@ class Httprequest {
 		const instance: AxiosInstance = axios.create();
 		axiosConfig.method || (axiosConfig.method = 'post');
 		const config = {
-			baseURL: process.env.NODE_ENV === 'development' ? '/api' : '/api',
+			baseURL: process.env.NODE_ENV === 'development' ? '/sics-boot' : '/sics-boot',
 			timeout: this.timeout,
 			...axiosConfig,
 		};

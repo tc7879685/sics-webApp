@@ -1,13 +1,18 @@
 <template>
-	<section  class="login-form">
-		<bc-form v-bind="formConfig"> </bc-form>
-
-
-	</section>
+  <div class="header"></div>
+	<div  class="content">
+    <div class="login-form">
+      <bc-form v-bind="formConfig"> </bc-form>
+      <img :src=captcha()>
+    </div>
+	</div>
+  <div class="footer"></div>
 </template>
 
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
+  import {getCaptcha} from '@/api'
+  import {noNumericToBlank, patternSMs} from "@fe-hl/utils";
 	export default defineComponent( {
 		name: 'Login',
     setup(){
@@ -35,18 +40,48 @@
                 { required: true, message: '请输入密码' }
               ],
             },
-          ]
+            {
+              label: '验证码',
+              componentType: 'captcha',
+              type: 'text',
+              formatter: noNumericToBlank,
+              placeholder: '请输入验证码',
+              src:async ()=>{return  await captcha()},
+              key: 'smsCode',
+              handlerCountdown: countdown => {
+                countdown();
+              },
+              maxlength: 6,
+              rules: [{ pattern: patternSMs, message: '请输入验证码' }],
+            },
+          ],
+          buttonLabel:"登陆"
         });
+        //获取验证吗
+        let captcha = async ()=>{
+            let res = await getCaptcha();
+            debugger
+            console.log(3243432)
+            return Promise.resolve(res.data).then(res()=>);
+        }
+        console.log(123)
         return {
           formConfig,
+          captcha
         }
     }
 	});
 </script>
 
 <style scoped lang="scss">
-  .login-form{
-     top: 20%;
-  }
+    .header{
+      height: 30%;
+    }
+    .content{
+      height: 50%;
+    }
+    .header{
+      height: 20%;
+    }
 
 </style>
