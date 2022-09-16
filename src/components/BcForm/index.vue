@@ -137,6 +137,7 @@
 					<van-slider v-model="formModels[item.key]" />
 				</template>
 			</van-field>
+      <!--手机验证码-->
 			<template v-else-if="item.componentType == 'sms'">
 				<van-field
 					v-model="formModels[item.key]"
@@ -163,6 +164,34 @@
 					</template>
 				</van-field>
 			</template>
+      <!--图片验证码-->
+      <template v-else-if="item.componentType == 'captcha'">
+        <van-field
+            v-model="formModels[item.key]"
+            :name="item.key"
+            :type="item.type as any"
+            :maxlength="item.maxlength"
+            clearable
+            :label="item.label"
+            :placeholder="item.placeholder"
+            :rules="item.rules"
+            @input="formatter(item.key, item.formatter)"
+        >
+          <template #button>
+            <van-image
+                :disabled="
+								countDownData.smSconfig.cumulative < countDownData.CUMULATIVE
+							"
+                :src="item.src"
+                size="small"
+                type="primary"
+                @click="handlerCountdown(item, countDownData.countdown)"
+            >
+              {{ countDownData.smSconfig.smsText }}
+            </van-image>
+          </template>
+        </van-field>
+      </template>
 			<van-field
 				v-else
 				v-model="formModels[item.key]"
@@ -185,7 +214,7 @@
 				native-type="submit"
 				loading-text="加载中..."
 			>
-				提交
+        {{buttonLabel}}
 			</van-button>
 		</div>
 		<van-calendar
@@ -237,6 +266,7 @@
 			| 'slider'
 			| 'select'
 			| 'calendar'
+      | 'captcha'
 			| 'uploader';
 		key: string;
 		type?: 'tel' | 'text' | 'password' | 'range' | 'single' | '';
@@ -254,6 +284,7 @@
 		accept?: string;
 		multiple?: boolean;
 		previewSize?: number;
+    src?:string;
 		options?: Array<OptionsType>;
 		formatter?: (str: string) => string;
 		beforeRead?: (file: Blob) => boolean;
@@ -291,6 +322,11 @@
 				type: Boolean,
 				default: true,
 			},
+      //按钮名称
+      buttonLabel: {
+        type: String,
+        default: "提交",
+      }
 		},
 		setup(ctx: any) {
 			let Instance: any = getCurrentInstance()?.proxy;
