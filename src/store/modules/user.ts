@@ -9,7 +9,7 @@ import {
 import { IUserInfoState, IRootState } from '../types';
 import { deepStateCopy, deleteStateKeys } from '@/utils';
 
-const userInfo: Module<IUserInfoState, IRootState> = {
+const userI: Module<IUserInfoState, IRootState> = {
 	namespaced: true,
 	state: {
 		accessToken: '11-22-33',
@@ -43,4 +43,4 @@ const userInfo: Module<IUserInfoState, IRootState> = {
 	},
 };
 
-export default userInfo;
+export default userI;
